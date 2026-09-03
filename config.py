@@ -10,5 +10,5 @@ class config:
     MYSQL_PASSWORD = os.getenv('DB_PASSWORD')
     MYSQL_DB = os.getenv('DB_NAME')
     SECRET_KEY = os.getenv('SECRET_KEY')
-    MYSQL_CURSORCLASS = MySQLdb.cursors.DictCursor  
+    MYSQL_CURSORCLASS = "DictCursor" 
     SECRET_KEY = os.getenv('SECRET_KEY')
