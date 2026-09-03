@@ -1,62 +1,60 @@
-from flask import Flask,request,jsonify,session
-from config import  config
+from flask import Flask, request, jsonify, session
+from config import config
 from utils.db import mysql
 from models.user import users
-from utils.decorators  import login_required
-app=Flask(__name__)
+from utils.decorators import login_required
+
+app = Flask(__name__)
 app.config.from_object(config)
 mysql.init_app(app)
 
 @app.route('/')
 def home():
-    return"Finance tracker is live!!!"
-@app.route('/test-db')
-def test_db():
-    try:
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM categories")
-        rows = cur.fetchall()
-        cur.close()
-        return {"status": "connected", "categories": rows}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+    return "Finance tracker is live!!!"
 
-@app.route('/signup',methods=['Post'])    
+@app.route('/signup', methods=['POST'])
 def signup():
-     data=request.get_json()
-     username=data.get('username')
-     email=data.get('email')
-     password=data.get('password')
-     if not username or not email or not password:
-          return jsonify({"error":"username,email,password all three are requires!"}),400
-     if users.find_by_email(email) is not None:
-          return jsonify({"error":"User already exist!you can try to login!"}),409
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
 
-     user=users.create(username,email,password)
-     return jsonify({"Message":"User added successfully","user":user.to_dict()}),201
+    if not username or not email or not password:
+        return jsonify({"error": "username, email, password all three are required!"}), 400
+    if users.find_by_email(email) is not None:
+        return jsonify({"error": "User already exists! Try logging in."}), 409
 
-@app.route("/login",methods=['Post'])
+    user = users.create(username, email, password)
+    session['user_id'] = user.user_id
+    return jsonify({"message": "User added successfully", "user": user.to_dict()}), 201
+
+@app.route("/login", methods=['POST'])
 def login():
-     data=request.get_json()
-     email=data.get("email")
-     password=data.get("password")
-     if not email or not password:
-          return jsonify({"error":"Email password both are required!!"}),400
-     user=users.find_by_email(email) 
-     if user is None or users.check_password(password) is False:
-          return jsonify({"error": "Invalid email or password"}), 401
-     if session['user_id']== user.user_id:
-          return jsonify({"Message": "Login successfully!!!","user":user.to_dict()}),200
-          
-@app.route("/logout",methods=['Post']) 
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+
+    if not email or not password:
+        return jsonify({"error": "Email and password are required!"}), 400
+
+    user = users.find_by_email(email)
+    if user is None or not user.check_password(password):
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    session['user_id'] = user.user_id
+    return jsonify({"message": "Login successful!", "user": user.to_dict()}), 200
+
+@app.route("/logout", methods=['POST'])
+@login_required
 def logout():
-     session.pop('user_id',None)
-     return jsonify({"Message": "Logout successfully!!!"}),200
+    session.pop('user_id', None)
+    return jsonify({"message": "Logout successful!"}), 200
 
-@app.route('/profile',methods=['get'])
+@app.route('/profile', methods=['GET'])
+@login_required
 def profile():
-     user=users.find_by_id()
-     return jsonify({"Message": "Your profile  is here!!!","user":user.to_dict()}),200
+    user = users.find_by_user_id(session['user_id'])
+    return jsonify({"message": "Your profile", "user": user.to_dict()}), 200
 
-if __name__=='__main__':
-     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
