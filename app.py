@@ -1,33 +1,24 @@
-from flask import Flask, render_template
-from flask_mysqldb import MySQL
-
+from flask import Flask
+from config import config
+from utils.db import mysql
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'iqrajaved485'
-app.config['MYSQL_DB'] = 'finance_tracker'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config.from_object(config)
+mysql.init_app(app)
 
-mysql = MySQL(app)
 @app.route('/')
 def home():
-    return render_template('base.html')
+    return "Finance Tracker is alive!"
 
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-
-@app.route('/signup')
-def signup():
-    return render_template('signup.html')
-
-
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
-
+@app.route('/test-db')
+def test_db():
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM categories")
+        rows = cur.fetchall()
+        cur.close()
+        return {"status": "connected", "categories": rows}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 if __name__ == '__main__':
     app.run(debug=True)
