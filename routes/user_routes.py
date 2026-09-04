@@ -9,7 +9,7 @@ from utils.exceptions import (
     UserNotFoundError   
 )
 from config import config
-from models.user import user
+from models.user import users
 user_bp=Blueprint("user",__name__)
 
 
@@ -35,13 +35,13 @@ def signup():
             )
 
     
-        if user.find_by_email(email) is not None:
+        if users.find_by_email(email) is not None:
             raise UserAlreadyExistsError(
                 "User already exists! Try logging in."
             )
 
 
-        new_user = user.create(
+        new_user = users.create(
             username,
             email,
             password
@@ -124,7 +124,7 @@ def logout():
 def profile():
 
     try:
-        current_user = user.find_by_user_id(
+        current_user = users.find_by_user_id(
             session["user_id"]
         )
 

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,render_template
 from utils.db import mysql
 from utils.decorators import login_required
 from config import config
@@ -19,7 +19,7 @@ app.register_blueprint(category_bp)
 
 @app.route("/")
 def home():
-    return "Finance Tracker is live!!!"
+    return render_template("login.html")
 
 
 if __name__ == "__main__":
