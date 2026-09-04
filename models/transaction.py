@@ -87,7 +87,7 @@ def find_by_user(self,user_id):
       return {transaction.from_row(row)for row in rows}
 
 @staticmethod
-def find_by_id(category_id):
+def find_by_user(category_id):
     cur = mysql.connection.cursor()
 
     cur.execute(

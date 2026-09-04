@@ -1,4 +1,4 @@
-#here we will customize our error exception by defininf class and overriding it whereever we want
+#here we will customize our error exception by defining class and overriding it whereever we want
 
 class InvalidDataError(Exception):
 
@@ -20,3 +20,13 @@ class InvalidTransactionTypeError(Exception):
 class TransactionNotFoundError(Exception):
       pass
 
+class UserAlreadyExistsError(Exception):
+    pass
+
+
+class InvalidCredentialsError(Exception):
+    pass
+
+
+class UserNotFoundError(Exception):
+    pass
