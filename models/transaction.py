@@ -87,7 +87,7 @@ def find_by_user(self,user_id):
       return {transaction.from_row(row)for row in rows}
 
 @staticmethod
-def find_by_user(category_id):
+def find_by_category(category_id):
     cur = mysql.connection.cursor()
 
     cur.execute(
@@ -104,7 +104,7 @@ def find_by_user(category_id):
     if row is not None:
      return{transaction.from_row(row)for row in row}
 @staticmethod
-def find_by_user(self,user_id,month,category_id):
+def find_by_umc(self,user_id,month,category_id):
       cur=mysql.connection.cursor()
       query="select * from transaction where user_id=%s"
       param=[user_id]

@@ -47,7 +47,7 @@ def transaction_create():
             category_id=int(category_id)
         except(TypeError,ValueError):
             raise InvalidCategoryError("It is must to enter Integer(0,1,2,3) category ID!!!")
-        if transaction.find_by_user(category_id) is None:
+        if transaction.find_by_category(category_id) is None:
             raise CategoryNotFoundError("This category_id not exist!!!")
         
 
@@ -86,7 +86,7 @@ def transaction_get():
 
     if month:
         try:
-            datetime.strptime(month,'%y-%m')
+            datetime.datetime.strptime(month, '%Y-%m')
         except InvalidDataError  :
             return jsonify({"Error":"The month must br in %%y-%%m format to get the transaction!!!"}),400
 
@@ -100,8 +100,8 @@ def transaction_get():
         except InvalidCategoryError as e:
             return jsonify({"Error":str(e)}),400
 
-    transactions=transaction.find_by_user(user_id,month,category_id)
-    return jsonify({"Transaction":transaction.to-dict(transaction)for transaction in transactions}) ,200
+    transactions=transaction.find_by_umc(user_id,month,category_id)
+    return jsonify({"Transaction":transaction.to_dict(transaction)for transaction in transactions}) ,200
 
 
 @transaction_bp.route("/transactions/<int:transaction_id>", methods=["PUT"])
@@ -138,7 +138,7 @@ def update_transaction(transaction_id):
             category_id=int(category_id)
         except(TypeError,ValueError):
             raise InvalidCategoryError("It is must to enter Integer(0,1,2,3) category ID!!!")
-        if transaction.find_by_user(category_id) is None:
+        if transaction.find_by_category(category_id) is None:
             raise CategoryNotFoundError("This category_id not exist!!!") 
         
 
