@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint,request,jsonify,session
+from flask import Flask, Blueprint,request,jsonify,session,render_template
 from utils.db import mysql
 from utils.decorators import login_required
 from utils.exceptions import (
@@ -13,9 +13,11 @@ from models.user import users
 user_bp=Blueprint("user",__name__)
 
 
-
+@user_bp.route("/signup", methods=["GET"])
+def signupget():
+    return render_template("signup.html")
 @user_bp.route("/signup", methods=["POST"])
-def signup():
+def signupgive():
     try:
         data = request.get_json()
         if not data:
@@ -48,8 +50,7 @@ def signup():
         )
         session["user_id"] = new_user.user_id
         return jsonify({
-            "message": "User added successfully",
-            "user": new_user.to_dict()
+            "message": "User added successfully"
         }),201
 
 
@@ -64,9 +65,11 @@ def signup():
         }),409
 
 
-
+@user_bp.route("/login", methods=["GET"])
+def loginget():
+    return render_template("login.html")
 @user_bp.route("/login", methods=["POST"])
-def login():
+def logingive():
     try:
         data = request.get_json()
         if not data:
@@ -82,7 +85,7 @@ def login():
                 "Email and password are required."
             )
 
-        user = user.find_by_email(email)
+        user = users.find_by_email(email)
         if (
             user is None
             or not user.check_password(password)
@@ -95,7 +98,6 @@ def login():
         session["user_id"] = user.user_id
         return jsonify({
             "message": "Login successful!",
-            "user": user.to_dict()
         }), 200
 
 
@@ -142,4 +144,18 @@ def profile():
         return jsonify({
             "error": str(e)
         }), 404 
-       
+
+    
+@user_bp.route("/me", methods=["GET"])
+@login_required
+def get_current_user():
+
+    user_id = session.get("user_id")
+    current_user = users.find_by_user_id(user_id)
+    if current_user is None:
+        return jsonify({
+            "error": "User not found."
+        }), 404
+    return jsonify({
+        "user": current_user.to_dict()
+    }), 200

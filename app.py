@@ -16,10 +16,15 @@ app.register_blueprint(user_bp)
 app.register_blueprint(transaction_bp)
 app.register_blueprint(category_bp)
 
-
 @app.route("/")
 def home():
     return render_template("login.html")
+
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template("dashboard.html")
 
 
 if __name__ == "__main__":
