@@ -57,14 +57,14 @@ def transaction_create():
                 raise InvalidDataError("It is must tto enter alll the credentials!!!!")
         
 
-        tran=tran = transaction.create(
-    session["user_id"],
-    category_id,
-    amount,
-    type,
-    description,
-    transaction_date
-)
+        transaction = transaction.create(
+        session["user_id"],
+        category_id,
+        amount,
+        type,
+        description,
+        transaction_date
+    )
         return jsonify({"message":"Transaction created successfully!!!","Transaction":transaction.to_dict(tran)}),201
 
     
