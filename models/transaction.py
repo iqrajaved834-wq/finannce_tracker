@@ -1,8 +1,20 @@
-from utils.db import mysql
-class transaction:
-    table_name="transactions"
 
-def __init__(self,transaction_id,user_id,category_id,amount,type,description,transaction_date):
+from utils.db import mysql
+
+
+class transaction:
+    table_name = "transactions"
+
+    def __init__(
+        self,
+        transaction_id,
+        user_id,
+        category_id,
+        amount,
+        type,
+        description,
+        transaction_date
+    ):
         self.transaction_id = transaction_id
         self.user_id = user_id
         self.category_id = category_id
@@ -11,7 +23,7 @@ def __init__(self,transaction_id,user_id,category_id,amount,type,description,tra
         self.description = description
         self.transaction_date = transaction_date
 
-def to_dict(self):
+    def to_dict(self):
         return {
             "transaction_id": self.transaction_id,
             "user_id": self.user_id,
@@ -22,9 +34,9 @@ def to_dict(self):
             "transaction_date": str(self.transaction_date)
         }
 
-@staticmethod
-def from_row(row):
-       return transaction(
+    @staticmethod
+    def from_row(row):
+        return transaction(
             row["transaction_id"],
             row["user_id"],
             row["category_id"],
@@ -32,27 +44,43 @@ def from_row(row):
             row["type"],
             row["description"],
             row["transaction_date"]
-       )
+        )
 
-#we can use find_by_id function because we have that in base class and we have set our table_name
+    @staticmethod
+    def create(
+        user_id,
+        category_id,
+        amount,
+        type,
+        description,
+        transaction_date
+    ):
+        cur = mysql.connection.cursor()
 
-@staticmethod
-def create(
-    user_id,
-    category_id,
-    amount,
-    type,
-    description,
-    transaction_date
-):
-    cur = mysql.connection.cursor()
-    cur.execute(
-        """
-        INSERT INTO transactions
-        (user_id, category_id, amount, type, description, transaction_date)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """,
-        (
+        cur.execute(
+            """
+            INSERT INTO transactions
+            (user_id, category_id, amount, type, description, transaction_date)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """,
+            (
+                user_id,
+                category_id,
+                amount,
+                type,
+                description,
+                transaction_date
+            )
+        )
+
+        mysql.connection.commit()
+
+        new_id = cur.lastrowid
+
+        cur.close()
+
+        return transaction(
+            new_id,
             user_id,
             category_id,
             amount,
@@ -60,120 +88,137 @@ def create(
             description,
             transaction_date
         )
-    )
 
-    mysql.connection.commit()
-    new_id = cur.lastrowid
-    cur.close()
+    @staticmethod
+    def find_by_user(user_id):
+        cur = mysql.connection.cursor()
 
-    return transaction(
-        new_id,
+        cur.execute(
+            """
+            SELECT *
+            FROM transactions
+            WHERE user_id=%s
+            ORDER BY transaction_date DESC
+            """,
+            (user_id,)
+        )
+
+        rows = cur.fetchall()
+
+        cur.close()
+
+        return [transaction.from_row(row) for row in rows]
+
+    @staticmethod
+    def find_by_category(category_id):
+        cur = mysql.connection.cursor()
+
+        cur.execute(
+            """
+            SELECT *
+            FROM transactions
+            WHERE category_id = %s
+            """,
+            (category_id,)
+        )
+
+        rows = cur.fetchall()
+
+        cur.close()
+
+        return [transaction.from_row(row) for row in rows]
+
+    @staticmethod
+    def find_by_umc(user_id, month=None, category_id=None):
+
+        cur = mysql.connection.cursor()
+
+        query = "SELECT * FROM transactions WHERE user_id=%s"
+
+        param = [user_id]
+
+        if month:
+            query += " AND DATE_FORMAT(transaction_date, '%Y-%m') = %s"
+            param.append(month)
+
+        if category_id:
+            query += " AND category_id=%s"
+            param.append(category_id)
+
+        query += " ORDER BY transaction_date DESC"
+
+        cur.execute(query, tuple(param))
+
+        rows = cur.fetchall()
+
+        cur.close()
+
+        return [transaction.from_row(row) for row in rows]
+
+    @staticmethod
+    def update_transaction(
+        transaction_id,
         user_id,
         category_id,
         amount,
         type,
         description,
         transaction_date
-    )
+    ):
+        cur = mysql.connection.cursor()
 
-@staticmethod
-def find_by_user(self,user_id):
-      cur=mysql.connection.cursor()
-      cur.execute(
-            """"select * from transactions where user_id=%s
-                order by transaction_date  DESC""",(user_id,))
-      rows=cur.fetchall()
-      cur.close()
-      return {transaction.from_row(row)for row in rows}
-
-@staticmethod
-def find_by_category(category_id):
-    cur = mysql.connection.cursor()
-
-    cur.execute(
+        query = """
+            UPDATE transactions
+            SET
+                category_id=%s,
+                amount=%s,
+                type=%s,
+                description=%s,
+                transaction_date=%s
+            WHERE transaction_id=%s
+            AND user_id=%s
         """
-        SELECT *
-        FROM categories
-        WHERE category_id = %s
-        """,
-        (category_id,)
-    )
 
-    row = cur.fetchone()
-    cur.close()
-    if row is not None:
-     return{transaction.from_row(row)for row in row}
-@staticmethod
-def find_by_umc(self,user_id,month,category_id):
-      cur=mysql.connection.cursor()
-      query="select * from transaction where user_id=%s"
-      param=[user_id]
+        cur.execute(
+            query,
+            (
+                category_id,
+                amount,
+                type,
+                description,
+                transaction_date,
+                transaction_id,
+                user_id
+            )
+        )
 
-      if month:
-            query+="And Data_format(transaction_date,'%%y-%%m)'=%s"
-            param.append[month]
-      if category_id:
-            query+="And category_id=%s"
-            param[category_id]
+        mysql.connection.commit()
 
-      "order by transaction_date DESC"
+        affected_rows = cur.rowcount
 
-      cur.execute(query,tuple(param))
-      rows=cur.fetchall()
-      cur.close()
-      return {transaction.from_row(row)for row in rows}
+        cur.close()
 
-@staticmethod
-def update_transaction(
-          transaction_id,
-          user_id,
-          category_id,
-          amount,
-          type,
-          description,
-          transaction_date
-):
-      cur=mysql.connection.cursor()
-      query="""update transactions
-             "set
-             category_id=%s 
-             amount = %s,
-             type = %s,
-             description = %s,
-             transaction_date = %s
-             where transaction_id=%s And user_id=%s"""
-      cur.execute(query,(
-             category_id,
-            amount,
-            type,
-            description,
-            transaction_date,
-            transaction_id,
-            user_id
-      ))
-      mysql.connection.commit()
-      affected_rows=cur.rowcount
-      cur.close()
-      return (affected_rows)
+        return affected_rows
 
-@staticmethod
-def delete(transaction_id, user_id):
+    @staticmethod
+    def delete(transaction_id, user_id):
 
-    cur = mysql.connection.cursor()
-    cur.execute(
-        """
-        DELETE FROM transactions
-        WHERE transaction_id = %s
-        AND user_id = %s
-        """,
-        (transaction_id, user_id)
-    )
+        cur = mysql.connection.cursor()
 
-    mysql.connection.commit()
-    affected_rows = cur.rowcount
-    cur.close()
-    return affected_rows
-      
-    
-      
-      
+        cur.execute(
+            """
+            DELETE FROM transactions
+            WHERE transaction_id = %s
+            AND user_id = %s
+            """,
+            (transaction_id, user_id)
+        )
+
+        mysql.connection.commit()
+
+        affected_rows = cur.rowcount
+
+        cur.close()
+
+        return affected_rows
+

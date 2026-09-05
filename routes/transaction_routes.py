@@ -14,7 +14,7 @@ from models.transaction import transaction
 transaction_bp=Blueprint("transaction",__name__)
 
 
-@transaction_bp.route("/transactions",methods=["get"])
+@transaction_bp.route("/transactions",methods=["POST"])
 @login_required
 def transaction_create():
     try:
@@ -57,7 +57,14 @@ def transaction_create():
                 raise InvalidDataError("It is must tto enter alll the credentials!!!!")
         
 
-        tran=transaction.create(session["user_id"],amount,category_id,type,description,transaction_date)
+        tran=tran = transaction.create(
+    session["user_id"],
+    category_id,
+    amount,
+    type,
+    description,
+    transaction_date
+)
         return jsonify({"message":"Transaction created successfully!!!","Transaction":transaction.to_dict(tran)}),201
 
     
@@ -77,31 +84,54 @@ def transaction_create():
 
     
 
-@transaction_bp.route("/transactions",methods=["GET"])
+@transaction_bp.route("/transactions", methods=["GET"])
 @login_required
 def transaction_get():
-    user_id=session["user_id"]
-    month=request.args.get("month")
-    category_id=request.args.get("category_id")
+
+    user_id = session["user_id"]
+
+    month = request.args.get("month")
+    category_id = request.args.get("category_id")
 
     if month:
         try:
             datetime.datetime.strptime(month, '%Y-%m')
-        except InvalidDataError  :
-            return jsonify({"Error":"The month must br in %%y-%%m format to get the transaction!!!"}),400
+        except ValueError:
+            return jsonify({
+                "Error": "The month must be in YYYY-MM format!"
+            }), 400
 
     if category_id:
         try:
-            category_id=int(category_id) 
-            if category_id<=0:
-              raise InvalidCategoryError("There must be category greater than")  
-        except (TypeError,ValueError):
-            return jsonify({"Error":"The Cateegory_id must be an integer(0,1,2,3...) !!!"}),400
-        except InvalidCategoryError as e:
-            return jsonify({"Error":str(e)}),400
+            category_id = int(category_id)
 
-    transactions=transaction.find_by_umc(user_id,month,category_id)
-    return jsonify({"Transaction":transaction.to_dict(transaction)for transaction in transactions}) ,200
+            if category_id <= 0:
+                raise InvalidCategoryError(
+                    "There must be category greater than 0"
+                )
+
+        except (TypeError, ValueError):
+            return jsonify({
+                "Error": "The category_id must be an integer!"
+            }), 400
+
+        except InvalidCategoryError as e:
+            return jsonify({
+                "Error": str(e)
+            }), 400
+
+    transactions = transaction.find_by_umc(
+        user_id,
+        month,
+        category_id
+    )
+
+    return jsonify({
+        "Transaction": [
+            t.to_dict()
+            for t in transactions
+        ]
+    }), 200
 
 
 @transaction_bp.route("/transactions/<int:transaction_id>", methods=["PUT"])

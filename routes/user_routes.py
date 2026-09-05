@@ -146,16 +146,16 @@ def profile():
         }), 404 
 
     
-@user_bp.route("/me", methods=["GET"])
-@login_required
-def get_current_user():
+# @user_bp.route("/me", methods=["GET"])
+# @login_required
+# def get_current_user():
 
-    user_id = session.get("user_id")
-    current_user = users.find_by_user_id(user_id)
-    if current_user is None:
-        return jsonify({
-            "error": "User not found."
-        }), 404
-    return jsonify({
-        "user": current_user.to_dict()
-    }), 200
+#     user_id = session.get("user_id")
+#     current_user = users.find_by_user_id(user_id)
+#     if current_user is None:
+#         return jsonify({
+#             "error": "User not found."
+#         }), 404
+#     return jsonify({
+#         "user": current_user.to_dict()
+#     }), 200

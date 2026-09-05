@@ -33,15 +33,17 @@ def create_category():
             )
 
         
-        category = category.create(
-            session["user_id"],
-            name,
-            type
-        )
+        new_category = category.create(
+        session["user_id"],
+        name,
+        type
+         )
+
         return jsonify({
-            "message": "Category created successfully.",
-            "category": category.to_dict()
+        "message": "Category created successfully.",
+        "category": new_category.to_dict()
         }), 201
+       
 
     except InvalidDataError as e:
         return jsonify({
@@ -58,7 +60,12 @@ def get_category():
         categories=category.get_all(session["user_id"])
         if categories is None:
             raise CategoryNotFoundError("the user has no category!!!!!")
-        return jsonify({"Categories":category.to_dict(category)for category in categories}),200
+        return jsonify({
+        "Categories": [
+        c.to_dict()
+        for c in categories
+    ]
+}), 200
 
     except CategoryNotFoundError as e:
         return jsonify({"Error":str(e)}),404

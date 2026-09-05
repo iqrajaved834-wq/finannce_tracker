@@ -57,7 +57,7 @@ class category:
          cur.execute("""select * from categories where user_id is null or user_id=%s""",(user_id,))
          rows=cur.fetchall()
          cur.close()
-         return {category.from_row(row)for row in rows}
+         return [category.from_row(row) for row in rows]
 
 
 
