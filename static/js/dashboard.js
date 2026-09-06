@@ -183,155 +183,215 @@ async function loadrecenttransactions(){
 }  
 loadrecenttransactions();
 
+
 async function loadspendingoverview() {
+
     try {
-    const response = await fetch("/transactions", {
-     method: "GET"
-    });
-    const data = await response.json();
 
-    if (!response.ok) {
-        console.log(data.error || data.Error);
-        return;
-    }
-    const transactions = data.Transaction;
+        const response = await fetch("/transactions", {
+            method: "GET"
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            console.log(data.error || data.Error);
+            return;
+        }
+        const transactions = data.Transaction;
 
-
-    const response2 = await fetch("/categories", {
-        method: "GET"
-    });
-    const data2 = await response2.json();
-    if (!response2.ok) {
-        console.log(data2.error || data2.Error);
-        return;
-    }
-    const categories = data2.Categories;
-
-
-    
-    const categoryMap = {};
-    categories.forEach(function(category) {
-        categoryMap[category.category_id] = category.name;
-    });
+        const response2 = await fetch("/categories", {
+            method: "GET"
+        });
+        const data2 = await response2.json();
+        if (!response2.ok) {
+            console.log(data2.error || data2.Error);
+            return;
+        }
+        const categories = data2.Categories;
 
 
-    const period = document.getElementById("spendingPeriod").value;
-    const today = new Date();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
+        const categoryMap = {};
+        categories.forEach(function(category) {
+            categoryMap[category.category_id] = category.name;
+
+        });
+
+        const filteredtransactions = transactions.filter(function(transaction) {
+            return transaction.type === "expense";
+
+        });
 
 
-    let expenses = transactions.filter(function(transaction) {
-        return transaction.type === "expense";
-    });
+        const period =
+            document.getElementById("spendingPeriod").value;
+        const today = new Date();
+        const currentmonth = today.getMonth();
+        const currentyear = today.getFullYear();
 
 
-    
-    // Calculate spending for each category
-    const expenseofeachcategory = {};
+        const periodtransactions = filteredtransactions.filter(function(transaction) {
 
-    expenses.forEach(function(transaction) {
+            const date = new Date(transaction.transaction_date);
+            if (isNaN(date.getTime())) {
+                return false;
+            }
 
-        const catid = transaction.category_id;
 
-        if (!expenseofeachcategory[catid]) {
+            const datemonth = date.getMonth();
+            const dateyear = date.getFullYear();
 
-            expenseofeachcategory[catid] =
-                Number(transaction.amount);
+            if (period === "this_month") {
 
-        } else {
+                return (
+                    datemonth === currentmonth &&
+                    dateyear === currentyear
+                );
 
-            expenseofeachcategory[catid] +=
-                Number(transaction.amount);
+            }
+            if (period === "last_month") {
+
+                let lastmonth = currentmonth - 1;
+                let lastyear = currentyear;
+
+
+                if (lastmonth < 0) {
+
+                    lastmonth = 11;
+                    lastyear = currentyear - 1;
+
+                }
+
+
+                return (
+                    datemonth === lastmonth &&
+                    dateyear === lastyear
+                );
+
+            }
+
+            if (period === "this_year") {
+
+                return dateyear === currentyear;
+
+            }
+
+
+            return false;
+
+        });
+
+
+        const amountofcategory = {};
+        periodtransactions.forEach(function(transaction) {
+
+            const catid = transaction.category_id;
+            const amount = Number(transaction.amount);
+
+            if (amountofcategory[catid]) {
+
+                amountofcategory[catid] += amount;
+
+            }
+            else {
+
+                amountofcategory[catid] = amount;
+
+            }
+
+        });
+        const container =
+            document.getElementById("spendingOverview");
+
+        container.innerHTML = "";
+        if (Object.keys(amountofcategory).length === 0) {
+
+            container.innerHTML =
+                "<p>No spending found.</p>";
+
+            return;
 
         }
+        const amounts =
+            Object.values(amountofcategory);
 
-    });
+        const maxamount =
+            Math.max(...amounts)
+
+        Object.keys(amountofcategory).forEach(function(cat) {
+
+            const categoryName =
+                categoryMap[cat];
+
+            const categoryAmount =
+                amountofcategory[cat];
+
+            const percentage =
+                (categoryAmount / maxamount) * 100;
 
 
-    const container =
-        document.getElementById("spendingOverview");
+            const item =
+                document.createElement("div");
 
-    container.innerHTML = "";
+            item.classList.add("spending-bar-item");
 
 
-    if (Object.keys(expenseofeachcategory).length === 0) {
+            item.innerHTML = `
 
-        container.innerHTML =
-            `<p class="no-spending">
-                No spending found for this period.
-            </p>`;
+                <div class="spending-bar-header">
 
-        return;
+                    <span>
+                        ${categoryName || "Unknown Category"}
+                    </span>
+
+                    <strong>
+                        Rs.${categoryAmount.toLocaleString()}
+                    </strong>
+
+                </div>
+
+
+                <div class="spending-bar-background">
+
+                    <div
+                        class="spending-bar"
+                        style="width: ${percentage}%">
+                    </div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(item);
+
+        });
+
     }
 
 
-    const amounts = Object.values(expenseofeachcategory);
+    catch(error) {
 
-    const maxAmount = Math.max(...amounts);
+        console.log(
+            "Something went wrong!!!!!!",
+            error
+        );
 
+    }
 
+}
 
-    Object.keys(expenseofeachcategory).forEach(function(cat) {
-        const categoryname =
-            categoryMap[cat] || "Unknown";
-
-        const categoryamount =
-            expenseofeachcategory[cat];
-
-        const barWidth =
-            (categoryamount / maxAmount) * 100;
-
-        const Item =
-            document.createElement("div");
-        Item.classList.add("spending-bar-item");
+const overview =
+    document.getElementById("spendingPeriod");
 
 
-        Item.innerHTML = `
-            <div class="spending-bar-header">
+if (overview) {
 
-                <span>${categoryname}</span>
+    overview.addEventListener("change", function() {
 
-                <strong>
-                    Rs.${categoryamount.toLocaleString()}
-                </strong>
-
-            </div>
-
-            <div class="spending-bar-background">
-
-                <div
-                    class="spending-bar"
-                    style="width: ${barWidth}%">
-                </div>
-
-            </div>
-        `;
-
-
-        container.appendChild(Item);
+        loadspendingoverview();
 
     });
 
 }
 
-catch(error) {
 
-    console.log(
-        "Something went wrong while loading spending overview.",
-        error
-    );
-
-}
-
-}
 loadspendingoverview();
-const spendingPeriod =
-document.getElementById("spendingPeriod");
-
-if (spendingPeriod) {
-spendingPeriod.addEventListener(
-    "change",
-    loadspendingoverview
-);
-}
