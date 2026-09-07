@@ -110,78 +110,115 @@ async function loadtransactions() {
 
 loadtransactions();
 
-async function loadrecenttransactions(){
-    try{
-        const response=await fetch("/transactions",{
-            method:"GET"
-        });
-        const data=await response.json();
-        if(!response.ok){
-            console.log([data.error]||[data.Error])
-        }
-        const transactions =data.Transaction;
+async function loadrecenttransactions() {
+try {
+const response = await fetch("/transactions", {
+method: "GET"
+});
 
+    const data = await response.json();
 
-        const response2=await fetch("/categories",{
-            method:"GET"
-        });
-        const data2= await response2.json();
-        if(!response.ok){
-            console.log([data.error]||[data.Error])
-        }
-        const categories=data2.Categories;
-        
+    if (!response.ok) {
+        console.log(data.error || data.Error);
+        return;
+    }
 
-       
-        const categoryMap = {};
-        categories.forEach(function(category) {
+    const transactions = data.Transaction;
+
+    const response2 = await fetch("/categories", {
+        method: "GET"
+    });
+
+    const data2 = await response2.json();
+
+    if (!response2.ok) {
+        console.log(data2.error || data2.Error);
+        return;
+    }
+
+    const categories = data2.Categories;
+
+    const categoryMap = {};
+
+    categories.forEach(function(category) {
         categoryMap[category.category_id] = category.name;
-        });
-        const rescenttransactions=transactions.slice(0,5);
-        
+    });
 
-        const container=document.getElementById("recentTransactions");
-        container.innerHTML="";
+    const recenttransactions = transactions.slice(0, 5);
 
-        if(rescenttransactions.length===0){
-            container.innerHTML=
-            "<p> NO TRANSACTION YET! </p>";
-             return;
-             }
+    const container = document.getElementById("recentTransactions");
 
-
-        rescenttransactions.forEach(function(tran){
-            const categoryname=categoryMap[tran.category_id]||"";
-            const amountClass=tran.type==="income"?"transaction_income":"transaction_expense";
-            const amountsign=tran.type==="income"?"+":"-";
-
-
-            const transactionItem=document.createElement("div");
-            transactionItem.classList.add("transaction_item");
-
-       
-            transactionItem.innerHTML=
-            `<div class="transaction_information">
-             <strong> ${categoryname}</strong>
-             <span> ${tran.description}</span>
-             </div>
-             <div class="transaction_amount">
-             <strong class="${amountClass}"> ${amountsign} Rs ${Number(tran.amount). toLocaleString()}</strong>
-             <span><span>${tran.transaction_date}</span></span>
-             </div>
-            `
-        container.appendChild( transactionItem);
-        })
-
+    if (!container) {
+        return;
     }
-    catch(error){
-     console.log(
-            "Something went wrong while loading recent transactions.",
-            error
-        );
+
+    container.innerHTML = "";
+
+    if (recenttransactions.length === 0) {
+        container.innerHTML = "<p>No transactions yet.</p>";
+        return;
     }
-}  
+
+    recenttransactions.forEach(function(tran) {
+
+        const categoryname =
+            categoryMap[tran.category_id] || "Unknown Category";
+
+        const amountSign =
+            tran.type === "income" ? "+" : "-";
+
+        const amountClass =
+            tran.type === "income"
+                ? "income-amount"
+                : "expense-amount";
+
+        const transactionItem =
+            document.createElement("div");
+
+        transactionItem.classList.add("transaction");
+
+        transactionItem.innerHTML = `
+            <div class="transaction-left">
+
+                <div class="transaction-icon">
+                    ${tran.type === "income" ? "↑" : "↓"}
+                </div>
+
+                <div>
+                    <strong>${categoryname}</strong>
+                    <span>${tran.description}</span>
+                </div>
+
+            </div>
+
+            <div>
+                <strong class="${amountClass}">
+                    ${amountSign} Rs. ${Number(tran.amount).toLocaleString()}
+                </strong>
+
+                <span>
+                    ${tran.transaction_date}
+                </span>
+            </div>
+        `;
+
+        container.appendChild(transactionItem);
+    });
+
+} catch (error) {
+
+    console.log(
+        "Something went wrong while loading recent transactions.",
+        error
+    );
+
+}
+
+
+}
+
 loadrecenttransactions();
+
 
 
 async function loadspendingoverview() {
@@ -223,6 +260,9 @@ async function loadspendingoverview() {
 
         const period =
             document.getElementById("spendingPeriod").value;
+        if (!spendingPeriod) {
+        return;
+        }
         const today = new Date();
         const currentmonth = today.getMonth();
         const currentyear = today.getFullYear();
@@ -392,6 +432,21 @@ if (overview) {
     });
 
 }
-
-
 loadspendingoverview();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

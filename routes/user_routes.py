@@ -144,18 +144,73 @@ def profile():
         return jsonify({
             "error": str(e)
         }), 404 
+@user_bp.route("/change-password-page")
+@login_required
+def change_password_page():
 
-    
-# @user_bp.route("/me", methods=["GET"])
-# @login_required
-# def get_current_user():
+    return render_template("change_password.html")
 
-#     user_id = session.get("user_id")
-#     current_user = users.find_by_user_id(user_id)
-#     if current_user is None:
-#         return jsonify({
-#             "error": "User not found."
-#         }), 404
-#     return jsonify({
-#         "user": current_user.to_dict()
-#     }), 200
+@user_bp.route("/change-password", methods=["PUT"])
+@login_required
+def change_password():
+
+    try:
+
+        data = request.get_json()
+
+        if not data:
+            raise InvalidDataError(
+                "Request data is required."
+            )
+
+        current_password = data.get("current_password")
+        new_password = data.get("new_password")
+
+        if not current_password or not new_password:
+            raise InvalidDataError(
+                "Current password and new password are required."
+            )
+
+        user = users.find_by_user_id(
+            session["user_id"]
+        )
+
+        if user is None:
+            raise UserNotFoundError(
+                "User not found."
+            )
+
+        if not user.check_password(current_password):
+            raise InvalidCredentialsError(
+                "Current password is incorrect."
+            )
+
+        users.update_password(
+            user.user_id,
+            new_password
+        )
+
+        return jsonify({
+            "message": "Password changed successfully."
+        }), 200
+
+
+    except InvalidDataError as e:
+
+        return jsonify({
+            "error": str(e)
+        }), 400
+
+
+    except InvalidCredentialsError as e:
+
+        return jsonify({
+            "error": str(e)
+        }), 400
+
+
+    except UserNotFoundError as e:
+
+        return jsonify({
+            "error": str(e)
+        }), 404

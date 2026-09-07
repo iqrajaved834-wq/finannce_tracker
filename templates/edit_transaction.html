@@ -1,0 +1,270 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Update Transaction | Finance Tracker{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+
+            <div class="logo-mark">
+                FT
+            </div>
+
+            <div>
+                <h2>Finance</h2>
+                <span>Tracker</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="/dashboard" class="nav-item">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="/transactions-page" class="nav-item active">
+                <span>↕</span>
+                Transactions
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>▦</span>
+                Categories
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>⚙</span>
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button class="nav-item logout-btn">
+                <span>↪</span>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    
+    <main class="dashboard-main">
+        <header class="dashboard-header">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="transaction-form-back-btn"
+                    onclick="window.location.href='/transactions-page'"
+                >
+                    ← Back
+                </button>
+
+                <p class="dashboard-greeting">
+                    Manage your finances
+                </p>
+
+                <h1>
+                    Update Transaction
+                </h1>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="notification-btn">
+                    🔔
+                </button>
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        I
+                    </div>
+
+                    <div>
+
+                        <strong id="username">
+                            Loading...
+                        </strong>
+
+                        <span>
+                            Personal Account
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        
+        <section class="transaction-form-page-card">
+
+            <div class="transaction-form-page-heading">
+
+                <div>
+
+                    <h2>
+                        Edit Transaction
+                    </h2>
+
+                    <p>
+                        Update the details of your transaction
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        
+            <form id="editTransactionForm">
+                
+        <input
+        type="hidden"
+        id="editTransactionId"
+        value="{{ transaction_id }}"
+        >
+
+                <div class="transaction-form-field">
+
+                    <label for="editTransactionDescription">
+                        Description
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editTransactionDescription"
+                        placeholder="Enter description"
+                        required
+                    >
+
+                </div>
+                <div class="transaction-form-field">
+
+                    <label for="editTransactionAmount">
+                        Amount
+                    </label>
+
+                    <input
+                        type="number"
+                        id="editTransactionAmount"
+                        placeholder="Enter amount"
+                        step="0.01"
+                        min="0"
+                        required
+                    >
+
+                </div>
+                <div class="transaction-form-field">
+
+                    <label for="editTransactionCategory">
+                        Category
+                    </label>
+
+                    <select
+                        id="editTransactionCategory"
+                        required
+                    >
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="transaction-form-field">
+
+                    <label for="editTransactionType">
+                        Type
+                    </label>
+
+                    <select
+                        id="editTransactionType"
+                        required
+                    >
+
+                        <option value="">
+                            Select Type
+                        </option>
+
+                        <option value="income">
+                            Income
+                        </option>
+
+                        <option value="expense">
+                            Expense
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="transaction-form-field">
+
+                    <label for="editTransactionDate">
+                        Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="editTransactionDate"
+                        required
+                    >
+
+                </div>
+                <div
+                    id="editTransactionMessage"
+                    class="transaction-form-message"
+                >
+                </div>
+
+                <div class="transaction-form-actions">
+
+                    <button
+                        type="button"
+                        class="transaction-form-cancel-btn"
+                        onclick="window.location.href='/transactions-page'"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="transaction-form-submit-btn"
+                    >
+                        Update Transaction
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+

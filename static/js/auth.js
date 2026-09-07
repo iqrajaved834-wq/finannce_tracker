@@ -35,30 +35,25 @@ if (signupform) {
             const data = await response.json();
 
             message.classList.remove("hidden");
-
             if (response.ok) {
+            alert("✅ " + data.message);
 
-                message.textContent = data.message;
-                message.classList.add("success");
+            signupform.reset();
 
-                signupform.reset();
-
-                window.location.href = "/dashboard";
+            window.location.href = "/dashboard";
 
             } else {
 
-                message.textContent = data.error;
-                message.classList.add("error");
+            alert("❌ " + (data.error || data.Error || "Signup failed."));
 
-            }
+           }
 
-        } catch (error) {
+          } catch (error) {
 
-            message.classList.remove("hidden");
-
-            message.textContent = "Something went wrong.";
-
-            message.classList.add("error");
+          message.classList.remove("hidden"); 
+          message.textContent = "Something went wrong.";
+          message.classList.add("error");
+          console,log("Something goe swrrong!!!!");
 
         }
 
@@ -102,31 +97,29 @@ if (loginform) {
 
             message.classList.remove("hidden");
 
-            if (response.ok) {
+           if (response.ok) {
 
-                message.textContent = data.message;
-                message.classList.add("success");
+            alert("✅ Login successful!");
 
-                loginform.reset();
+           loginform.reset();
 
-                window.location.href = "/dashboard";
+           window.location.href = "/dashboard";
 
-            } else {
+        } else {
 
-                message.textContent = data.error;
-                message.classList.add("error");
-
-            }
-
-        } catch (error) {
-
-            message.classList.remove("hidden");
-
-            message.textContent = "Something went wrong.";
-
-            message.classList.add("error");
+         alert("❌ " + (data.error || data.Error || "Login failed."));
 
         }
+
+       } catch (error) {
+
+       
+       message.classList.remove("hidden"); 
+       message.textContent = "Something went wrong.";
+       message.classList.add("error");
+       console.log("something goes wrong!!!!");
+
+      }
 
     });
 

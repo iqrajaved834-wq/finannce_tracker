@@ -138,7 +138,7 @@ class transaction:
         param = [user_id]
 
         if month:
-            query += " AND DATE_FORMAT(transaction_date, '%Y-%m') = %s"
+            query += " AND DATE_FORMAT(transaction_date, '%%Y-%%m') = %s"
             param.append(month)
 
         if category_id:

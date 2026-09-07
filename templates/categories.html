@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Categories | Finance Tracker{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+
+            <div class="logo-mark">FT</div>
+
+            <div>
+                <h2>Finance</h2>
+                <span>Tracker</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="/dashboard" class="nav-item">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="/transactions-page" class="nav-item">
+                <span>↕</span>
+                Transactions
+            </a>
+
+            <a href="/categories-page" class="nav-item active">
+                <span>▦</span>
+                Categories
+            </a>
+
+            <a href="/settings" class="nav-item">
+                <span>⚙</span>
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button class="nav-item logout-btn">
+                <span>↪</span>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    
+    <main class="dashboard-main">
+
+
+       
+        <header class="dashboard-header">
+
+            <div>
+
+                <p class="dashboard-greeting">
+                    Manage your finances
+                </p>
+
+                <h1>Categories</h1>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="notification-btn">
+                    🔔
+                </button>
+
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        I
+                    </div>
+
+                    <div>
+
+                        <strong id="username">
+                            Loading...
+                        </strong>
+
+                        <span>
+                            Personal Account
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="dashboard-card categories-card">
+            
+            <div class="card-header">
+
+                <div>
+
+                    <h2>Your Categories</h2>
+
+                    <p>
+                        Categories available for your transactions
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="primary-btn"
+                    id="addCategoryBtn"
+                >
+                    + Add Category
+                </button>
+
+            </div>
+
+
+           <div
+         class="categories-grid"
+        id="categorycontainer"
+         >
+        Loading...
+        </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+{% endblock %}

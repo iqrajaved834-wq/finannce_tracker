@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block title %}Settings | Finance Tracker{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+
+            <div class="logo-mark">FT</div>
+
+            <div>
+                <h2>Finance</h2>
+                <span>Tracker</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="/dashboard" class="nav-item">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="/transactions-page" class="nav-item">
+                <span>↕</span>
+                Transactions
+            </a>
+
+            <a href="/categories-page" class="nav-item">
+                <span>▦</span>
+                Categories
+            </a>
+
+            <a href="/settings" class="nav-item active">
+                <span>⚙</span>
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button class="nav-item logout-btn">
+                <span>↪</span>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Main -->
+    <main class="dashboard-main">
+
+
+        <!-- Header -->
+        <header class="dashboard-header">
+
+            <div>
+
+                <p class="dashboard-greeting">
+                    Manage your finances
+                </p>
+
+                <h1>Settings</h1>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="notification-btn">
+                    🔔
+                </button>
+
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        I
+                    </div>
+
+                    <div>
+
+                        <strong id="username">
+                            Loading...
+                        </strong>
+
+                        <span>
+                            Personal Account
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Account Settings -->
+        <section class="dashboard-card settings-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>Account</h2>
+
+                    <p>
+                        Manage your account information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-content">
+
+                <div class="setting-item">
+
+                    <div class="setting-label">
+                        <strong>Username</strong>
+                        <span>Your account username</span>
+                    </div>
+
+                    <div
+                        class="setting-value"
+                        id="settingsUsername"
+                    >
+                        Loading...
+                    </div>
+
+                </div>
+
+
+                <div class="setting-item">
+
+                    <div class="setting-label">
+                        <strong>Email</strong>
+                        <span>Your account email address</span>
+                    </div>
+
+                    <div
+                        class="setting-value"
+                        id="settingsEmail"
+                    >
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Security -->
+        <section class="dashboard-card settings-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>Security</h2>
+
+                    <p>
+                        Manage your account security
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-content">
+
+                <div class="setting-item">
+
+                    <div class="setting-label">
+
+                        <strong>Password</strong>
+
+                        <span>
+                            Keep your account secure
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="primary-btn"
+                        id="changePasswordBtn"
+                        onclick="window.location.href='/change-password-page'"
+                    >
+                        Change Password
+                    </button>
+            
+            
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+{% endblock %}

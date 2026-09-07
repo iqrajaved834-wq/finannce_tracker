@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session,render_template
 import datetime
 from config import config
 from utils.db import mysql
@@ -13,7 +13,10 @@ from utils.exceptions import(
 from models.transaction import transaction
 transaction_bp=Blueprint("transaction",__name__)
 
-
+@transaction_bp.route("/add-transaction")
+@login_required
+def add_transaction_page():
+    return render_template("add_transaction.html")
 @transaction_bp.route("/transactions",methods=["POST"])
 @login_required
 def transaction_create():
@@ -57,7 +60,7 @@ def transaction_create():
                 raise InvalidDataError("It is must tto enter alll the credentials!!!!")
         
 
-        transaction = transaction.create(
+        tran = transaction.create(
         session["user_id"],
         category_id,
         amount,
@@ -133,7 +136,13 @@ def transaction_get():
         ]
     }), 200
 
-
+@transaction_bp.route("/edit-transaction/<int:transaction_id>",methods=["GET"])
+@login_required
+def edit_transaction_page(transaction_id):
+    return render_template(
+        "edit_transaction.html",
+        transaction_id=transaction_id
+    )
 @transaction_bp.route("/transactions/<int:transaction_id>", methods=["PUT"])
 @login_required
 def update_transaction(transaction_id):
@@ -177,7 +186,7 @@ def update_transaction(transaction_id):
         if description is None or transaction_date is None:
                 raise InvalidDataError("It is must tto enter alll the credentials!!!!")
 
-        affectedrow=transaction.update(
+        affectedrow=transaction.update_transaction(
              transaction_id,
              session["user_id"],
              category_id,

@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint,request,jsonify,session
+from flask import Flask, Blueprint,request,jsonify,session,render_template
 from utils.db import mysql
 from utils.decorators import login_required
 from utils.exceptions import (
@@ -11,7 +11,10 @@ from config import config
 from models.category import category
 category_bp=Blueprint("category",__name__)
 
-
+@category_bp.route("/add_category", methods=["GET"])
+@login_required
+def give_page():
+    return render_template("add_category.html")
 @category_bp.route("/categories", methods=["POST"])
 @login_required
 def create_category():

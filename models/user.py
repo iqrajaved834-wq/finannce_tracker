@@ -16,6 +16,20 @@ class users:
             plain_password.encode("utf-8"),
             self.hash_password.encode("utf-8")
         )
+    @staticmethod
+    def update_password(user_id: int, plain_password: str):
+
+        hash_password = users.generate_hash(plain_password)
+ 
+        cur = mysql.connection.cursor()
+
+        cur.execute(
+        "UPDATE users SET hash_password = %s WHERE user_id = %s",
+        (hash_password, user_id)
+    )
+
+        mysql.connection.commit()
+        cur.close()
 
     @staticmethod
     def generate_hash(plain_password: str) -> str:

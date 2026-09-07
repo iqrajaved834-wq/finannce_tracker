@@ -24,8 +24,22 @@ def home():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    
     return render_template("dashboard.html")
+
+@app.route("/transactions-page")
+@login_required
+def transactions_page(): 
+    return render_template("transactions.html")
+
+@app.route("/categories-page")
+@login_required
+def category_page(): 
+    return render_template("categories.html")
+
+@app.route("/settings")
+@login_required
+def setting_page(): 
+    return render_template("settings.html")
 
 
 if __name__ == "__main__":
