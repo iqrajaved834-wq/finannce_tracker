@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics | Finance Tracker{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-mark">FT</div>
+
+            <div>
+                <h2>Finance</h2>
+                <span>Tracker</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="/dashboard" class="nav-item">
+                <span>▣</span>
+                Dashboard
+            </a>
+
+            <a href="/transactions-page" class="nav-item">
+                <span>↔</span>
+                Transactions
+            </a>
+
+            <a href="/categories-page" class="nav-item">
+                <span>◫</span>
+                Categories
+            </a>
+
+            <a href="/analytics" class="nav-item active">
+                <span>▥</span>
+                Analytics
+            </a>
+
+            <a href="/settings" class="nav-item">
+                <span>⚙</span>
+                Settings
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <button class="nav-item logout-btn">
+                <span>↪</span>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+
+            <div>
+
+                <p class="dashboard-greeting">
+                    Understand your spending
+                </p>
+
+                <h1>Financial Analytics</h1>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <button class="notification-btn">
+                    🔔
+                </button>
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        I
+                    </div>
+
+                    <div>
+
+                        <strong id="username">
+                            Loading...
+                        </strong>
+
+                        <span>
+                            Personal Account
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="analytics-summary">
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-icon">
+                    💰
+                </div>
+
+                <div>
+
+                    <p>Total Expenses</p>
+
+                    <h2>
+                        Rs. {{ "%.2f"|format(total_expense) }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-icon">
+                    📊
+                </div>
+
+                <div>
+
+                    <p>Highest Spending Category</p>
+
+                    <h2>
+                        {{ highest_category }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-icon">
+                    📅
+                </div>
+
+                <div>
+
+                    <p>Highest Spending Month</p>
+
+                    <h2>
+                        {{ highest_month }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-icon">
+                    📈
+                </div>
+
+                <div>
+
+                    <p>Average Monthly Expense</p>
+
+                    <h2>
+                        Rs. {{ "%.2f"|format(average_expense) }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="analytics-charts">
+
+            <div class="chart-card">
+
+                <div class="chart-card-header">
+
+                    <div>
+
+                        <p>Monthly Analysis</p>
+
+                        <h2>Expenses by Month</h2>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <img
+                        src="{{ url_for('static', filename='month_expense.png') }}"
+                        alt="Monthly expense chart"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <div class="chart-card-header">
+
+                    <div>
+
+                        <p>Category Analysis</p>
+
+                        <h2>Expenses by Category</h2>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <img
+                        src="{{ url_for('static', filename='category_expense.png') }}"
+                        alt="Category expense chart"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}

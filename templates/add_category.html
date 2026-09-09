@@ -6,7 +6,6 @@
 
 <div class="dashboard">
 
-    <!-- Sidebar -->
     <aside class="sidebar">
 
         <div class="sidebar-logo">
@@ -37,11 +36,17 @@
                 <span>▦</span>
                 Categories
             </a>
+            <a href="/analytics" class="nav-item"> 
+            <span>▥</span> 
+            Analytics 
+            </a>
 
-            <a href="#" class="nav-item">
+            <a href="/settings" class="nav-item">
                 <span>⚙</span>
                 Settings
             </a>
+           
+
 
         </nav>
 
@@ -58,11 +63,13 @@
     </aside>
 
 
-    <!-- Main Screen -->
     <main class="dashboard-main">
-          
 
-        <!-- Header -->
+        <div class="transactions-back">
+            <a href="/categories-page">← Back</a>
+        </div>
+
+
         <header class="dashboard-header">
 
             <div>
@@ -108,7 +115,6 @@
         </header>
 
 
-       
         <section class="dashboard-card">
 
             <div class="card-header">
@@ -128,71 +134,74 @@
 
             <form id="addCategoryForm">
 
-    <div class="form-group">
+                <div class="form-group">
 
-        <label for="categoryName">
-            Category Name
-        </label>
+                    <label for="categoryName">
+                        Category Name
+                    </label>
 
-        <input
-            type="text"
-            id="categoryName"
-            name="category_name"
-            placeholder="e.g. Food"
-            required
-        >
+                    <input
+                        type="text"
+                        id="categoryName"
+                        name="category_name"
+                        placeholder="e.g. Food"
+                        required
+                    >
 
-    </div>
-
-
-    <div class="form-group">
-
-        <label for="categoryType">
-            Category Type
-        </label>
-
-        <select id="categoryType" name="type" required>
-
-            <option value="">
-                Select category type
-            </option>
-
-            <option value="income">
-                Income
-            </option>
-
-            <option value="expense">
-                Expense
-            </option>
-
-        </select>
-
-    </div>
+                </div>
 
 
-    <div class="form-actions">
+                <div class="form-group">
 
-        <button
-            type="submit"
-            class="primary-btn"
-        >
-            Add Category
-        </button>
+                    <label for="categoryType">
+                        Category Type
+                    </label>
 
-        <button
-            type="button"
-            class="transactions-back-btn"
-            onclick="window.location.href='/categories-page'"
-        >
-            ← Back
-        </button>
+                    <select
+                        id="categoryType"
+                        name="type"
+                        required
+                    >
 
-    </div>
+                        <option value="">
+                            Select category type
+                        </option>
 
-</form>
+                        <option value="income">
+                            Income
+                        </option>
+
+                        <option value="expense">
+                            Expense
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="transactions-back-btn"
+                        onclick="window.location.href='/categories-page'"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                    >
+                        Add Category
+                    </button>
+
+                </div>
+
+            </form>
 
         </section>
-
 
     </main>
 

@@ -5,6 +5,7 @@ from config import config
 from routes.user_routes import user_bp
 from routes.transaction_routes import transaction_bp
 from routes.category_routes import category_bp
+from routes.analytics_routes import analytics_bp
 
 
 app = Flask(__name__)
@@ -15,6 +16,7 @@ mysql.init_app(app)
 app.register_blueprint(user_bp)
 app.register_blueprint(transaction_bp)
 app.register_blueprint(category_bp)
+app.register_blueprint(analytics_bp)
 
 @app.route("/")
 def home():

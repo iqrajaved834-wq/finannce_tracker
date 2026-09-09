@@ -1,0 +1,1 @@
+from routes.analytics_routes import analytics_bp
