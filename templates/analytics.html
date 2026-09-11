@@ -38,7 +38,10 @@
                 <span>▥</span>
                 Analytics
             </a>
-
+             <a href="/export-page" class="nav-item">
+            <span>⇩</span>
+            Export
+            </a>
             <a href="/settings" class="nav-item">
                 <span>⚙</span>
                 Settings
@@ -62,48 +65,38 @@
 
         <header class="dashboard-header">
 
+    <div>
+        <p class="dashboard-greeting">Understand your spending</p>
+        <h1>Financial Analytics</h1>
+    </div>
+
+    <div class="profile-area">
+
+        <div class="analytics-period">
+            <label for="analyticsPeriod">Period</label>
+
+            <select id="analyticsPeriod">
+                <option value="this_month" selected>This Month</option>
+                <option value="last_month">Last Month</option>
+                <option value="this_year">This Year</option>
+                <option value="all_time">All Time</option>
+            </select>
+        </div>
+
+        <button class="notification-btn">🔔</button>
+
+        <div class="profile">
+            <div class="profile-avatar">I</div>
+
             <div>
-
-                <p class="dashboard-greeting">
-                    Understand your spending
-                </p>
-
-                <h1>Financial Analytics</h1>
-
+                <strong id="username">Loading...</strong>
+                <span>Personal Account</span>
             </div>
+        </div>
 
+    </div>
 
-            <div class="profile-area">
-
-                <button class="notification-btn">
-                    🔔
-                </button>
-
-                <div class="profile">
-
-                    <div class="profile-avatar">
-                        I
-                    </div>
-
-                    <div>
-
-                        <strong id="username">
-                            Loading...
-                        </strong>
-
-                        <span>
-                            Personal Account
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </header>
-
-
+</header>
         <section class="analytics-summary">
 
             <div class="analytics-card">

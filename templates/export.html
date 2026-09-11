@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Export | Finance Tracker{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+      <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-mark">FT</div>
+
+            <div>
+                <h2>Finance</h2>
+                <span>Tracker</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="/dashboard" class="nav-item ">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="/transactions-page" class="nav-item">
+            <span>↕</span>
+            Transactions
+            </a>
+
+            <a href="/categories-page" class="nav-item">
+                <span>▦</span>
+                Categories
+            </a>
+            <a href="/analytics" class="nav-item"> 
+            <span>▥</span> 
+            Analytics 
+            </a>
+            <a href="/export-page" class="nav-item active">
+            <span>⇩</span>
+            Export
+            </a>
+            <a href="/settings" class="nav-item">
+                <span>⚙</span>
+                Settings
+            </a>
+
+             
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <button  class="nav-item logout-btn">
+                <span>↪</span>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="dashboard-main">
+
+         <header class="dashboard-header">
+
+            <div>
+                <p class="dashboard-greeting">Good morning</p>
+                <h1>Welcome back!</h1>
+            </div>
+
+            <div class="profile-area">
+                <button class="notification-btn">
+                    🔔
+                </button>
+                <div class="profile">
+                    <div class="profile-avatar">
+                        I
+                    </div>
+                    <div>
+                        <strong id="username">Loading...</strong>
+                        <span>Personal Account</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="export-container">
+
+            <div class="export-card">
+
+                <div class="export-icon">
+                    ⇩
+                </div>
+
+                <div class="export-content">
+                    <h2>Export Transactions</h2>
+
+                    <p>
+                        Download all your recorded transactions
+                        from your Finance Tracker.
+                    </p>
+
+                    <div class="export-options">
+
+                        <div class="export-option">
+
+                            <div>
+                                <h3>CSV File</h3>
+                                <p>
+                                    Best for Excel, spreadsheets and
+                                    further data analysis.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="export-btn"
+                                onclick="startCSVExport()">
+                                Export CSV
+                            </button>
+
+                        </div>
+
+
+                        <div class="export-option">
+
+                            <div>
+                                <h3>PDF Report</h3>
+                                <p>
+                                    A clean report containing your
+                                    transaction records.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="export-btn"
+                                onclick="startPDFExport()">
+                                Export PDF
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p id="exportStatus" class="export-status"></p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}

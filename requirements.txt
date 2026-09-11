@@ -3,3 +3,6 @@ flask
 flask-mysqldb
 bcrypt
 python-dotenv
+pandas
+matplotlib
+reportlab

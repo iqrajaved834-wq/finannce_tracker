@@ -6,6 +6,7 @@ from routes.user_routes import user_bp
 from routes.transaction_routes import transaction_bp
 from routes.category_routes import category_bp
 from routes.analytics_routes import analytics_bp
+from routes.export_routes import export_bp
 
 
 app = Flask(__name__)
@@ -17,6 +18,7 @@ app.register_blueprint(user_bp)
 app.register_blueprint(transaction_bp)
 app.register_blueprint(category_bp)
 app.register_blueprint(analytics_bp)
+app.register_blueprint(export_bp)
 
 @app.route("/")
 def home():
@@ -42,6 +44,11 @@ def category_page():
 @login_required
 def setting_page(): 
     return render_template("settings.html")
+
+@app.route("/export-page")
+@login_required
+def export_page(): 
+    return render_template("export.html")
 
 
 if __name__ == "__main__":
