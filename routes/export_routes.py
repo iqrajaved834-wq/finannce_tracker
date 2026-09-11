@@ -23,7 +23,6 @@ def export_csv():
         )
 
     except Exception as e:
-
         print("CSV export error:", e)
         return {
             "error": "CSV export failed"

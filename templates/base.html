@@ -11,14 +11,49 @@
 
 <body>
 
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        ☰
+    </button>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     {% block content %}
     {% endblock %}
+
     <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
     <script src="{{ url_for('static', filename='js/transaction.js') }}"></script>
     <script src="{{ url_for('static', filename='js/category.js') }}"></script>
     <script src="{{ url_for('static', filename='js/setting.js') }}"></script>
     <script src="{{ url_for('static', filename='js/export.js') }}"></script>
-  
+
+    <script>
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const sidebar = document.querySelector(".sidebar");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+        if (mobileMenuBtn && sidebar && sidebarOverlay) {
+
+            mobileMenuBtn.addEventListener("click", function () {
+                sidebar.classList.toggle("open");
+                sidebarOverlay.classList.toggle("show");
+            });
+
+            sidebarOverlay.addEventListener("click", function () {
+                sidebar.classList.remove("open");
+                sidebarOverlay.classList.remove("show");
+            });
+
+            const sidebarLinks = sidebar.querySelectorAll("a");
+
+            sidebarLinks.forEach(function (link) {
+                link.addEventListener("click", function () {
+                    sidebar.classList.remove("open");
+                    sidebarOverlay.classList.remove("show");
+                });
+            });
+        }
+    </script>
+
 </body>
 </html>

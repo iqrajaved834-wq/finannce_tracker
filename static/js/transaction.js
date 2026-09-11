@@ -716,4 +716,27 @@ if (editTransactionForm) {
         }
     );
 }
+const transactionClearFilterBtn =
+    document.getElementById("transactionClearFilterBtn");
+
+if (transactionClearFilterBtn) {
+
+    transactionClearFilterBtn.addEventListener(
+        "click",
+        function() {
+
+            document.getElementById(
+                "transactionCategoryFilter"
+            ).value = "";
+
+            document.getElementById(
+                "transactionMonthFilter"
+            ).value = "";
+
+            window.location.reload();
+
+        }
+    );
+
+}
 

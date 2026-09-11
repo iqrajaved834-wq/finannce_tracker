@@ -59,25 +59,6 @@ def get_data(id, period):
 
     return df
 
-# def category_expense():
-#     id=session['user_id']
-#     df=get_data(id)
-#     if df.empty:
-#         return pd.Series(dtype='float64')
-#     df["amount"] = pd.to_numeric(df["amount"])
-#     df2=df.groupby("categoryname")['amount'].sum()
-#     return df2
-
-# def month_expense():
-#     id=session['user_id']
-#     df=get_data(id)
-#     if df.empty:
-#         return pd.Series(dtype='float64')
-#     df["amount"] = pd.to_numeric(df["amount"])
-#     df["transaction_date"]=pd.to_datetime(df["transaction_date"])
-#     df["month"]=df["transaction_date"].dt.strftime('%Y-%m')
-#     df3=df.groupby('month')['amount'].sum()
-#     return df3
 
 def show_category(df):
     if (df.empty):
